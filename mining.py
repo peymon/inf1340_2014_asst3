@@ -47,7 +47,7 @@ class StockMiner():
                 raise TypeError("Invalid type")
 
             ## Check for valid date
-            #if valid_date = datetime.datetime.strptime(item["Date"], "%Y-%m-%d"):
+            #if datetime.datetime.strptime(item["Date"], "%Y-%m-%d"):
             #    return True
             #else:
             #     return False
