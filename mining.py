@@ -21,6 +21,7 @@ __status__ = "Prototype"
 # imports one per line
 import json
 import datetime
+import itertools
 
 #stock_data = []
 #monthly_averages = []
@@ -45,24 +46,23 @@ class StockMiner():
         for item in self.stock_data:
             if type(item) is not dict:
                 raise TypeError("Invalid type")
-
-            ## Check for valid date
-            #if datetime.datetime.strptime(item["Date"], "%Y-%m-%d"):
-            #    return True
-            #else:
-            #     return False
-
             if "Date" in item.keys():
                 # Change valid date to YYYY/MM format
                 y_m_format = datetime.datetime.strptime(item["Date"], "%Y-%m-%d").strftime("%Y-%m")
-
+                item["Date"] = y_m_format
             else:
                 raise ValueError ("Invalid value")
+
+        for key, value in itertools.groupby(self.stock_data, lambda item: item["Date"]):
+            if type(item["Volume"]) is int and (type(item["Close"])) is int or type(item["Close"]) is float:
+                self.monthly_averages.append((key, sum((item["Volume"] * item["Close"]/item["Volume"]) for item in value)))
+            else:
+                raise TypeError ("Invalid Type")
 
             """
             Calculation of monthly average prices of a stock.
             average price = (V1 * C1 + V2 * C2)/(V1 + C2), where V is volume price and C is close price.
-            """
+
             if "Volume" in item.keys() and "Close" in item.keys:
                 if type(item["Volume"]) is int and (type(item["Close"])) is int or type(item["Close"]) is float):
                     numerator += item["Volume"] * item["Close"]
@@ -70,14 +70,14 @@ class StockMiner():
             else:
                     raise TypeError ("Invalid Type)"
 
-            """
+
             Create a tuple with two items: the average for that month and the date (only the month and year).
             Append the tuple for each month to a list.
-            """
+
                 self.monthly_averages.append(y_m_format, round(numerator/denominator, 2)))
+            """
 
-
-    def six_best_months():
+    def six_best_months(self):
         """
         Using monthly averages, report the six best months with the highest average stock price.
         :return: The best six months
@@ -87,7 +87,7 @@ class StockMiner():
         # return [('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0)]
 
 
-    def six_worst_months():
+    def six_worst_months(self):
         """
         Using monthly averages, report the six worst months with the lowest average stock price.
         :return: The worst six months
@@ -97,13 +97,12 @@ class StockMiner():
         #return [('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0)]
 
 
-
-#def read_json_from_file(file_name):
-#    """
-#    Read JSON from file.
-#    :param file_name: JSON file
-#    :return:
-#    """
-#    with open(file_name) as file_handle:
-#        file_contents = file_handle.read()
-#    return json.loads(file_contents)
+    def read_json_from_file(self, file_name):
+        """
+        Read JSON from file.
+        :param file_name: JSON file
+        :return:
+        """
+        with open(file_name) as file_handle:
+            file_contents = file_handle.read()
+        return json.loads(file_contents)
