@@ -35,8 +35,8 @@ class StockMiner():
 
     def __init__(self, stock_name, stock_file_name):
         """
-        :param stock_name:
-        :param stock_file_name:
+        :param stock_name: Name of stock
+        :param stock_file_name: Name of stock file
         :   return:
         """
         self.stock_name = stock_name
@@ -47,29 +47,32 @@ class StockMiner():
         self.get_averages()
 
     def change_date(self):
+        """
+        Change a valid date (YYYY-MM-DD) to YYYY/MM format
+        :return: Formatted date
+        """
         numerator = 0
         denominator = 0
         for item in self.stock_data:
             if type(item) is not dict:
                 raise TypeError("Invalid type")
             if "Date" in item.keys():
-                # Change valid date to YYYY/MM format
                 y_m_format = datetime.datetime.strptime(item["Date"], "%Y-%m-%d").strftime("%Y/%m")
                 item["Date"] = y_m_format
             else:
-                raise ValueError ("Invalid value")
+                raise ValueError("Invalid value")
 
     # average of stocks function
     def get_averages(self):
+        """
+        Calculation of monthly average prices of a stock.
+        Average price = (V1 * C1 + V2 * C2)/(V1 + C2), where V is volume price and C is close price.
+        Create a tuple with two items: the average for that month and the date (only the month and year).
+        Append the tuple for each month to a list.
+        :return: A list of tuples for each month
+        """
         monthly_numerator = []
         monthly_denominator = []
-        """
-            Calculation of monthly average prices of a stock.
-            average price = (V1 * C1 + V2 * C2)/(V1 + C2), where V is volume price and C is close price.
-
-            Create a tuple with two items: the average for that month and the date (only the month and year).
-            Append the tuple for each month to a list.
-         """
         for key, value in itertools.groupby(self.stock_data, lambda item: item["Date"]):
             numerator = sum([int(item["Volume"])*float(item["Close"]) for item in value])
             monthly_numerator.append((key, numerator))
@@ -77,12 +80,12 @@ class StockMiner():
         for key, value in itertools.groupby(self.stock_data, lambda item: item["Date"]):
             denominator = sum([int(item["Volume"]) for item in value])
             monthly_denominator.append((key, denominator))
-        i=0
+        i = 0
         while i < len(monthly_numerator):
             if monthly_numerator[i][0] == monthly_denominator[i][0]:
-                self.monthly_averages.append((monthly_numerator[i][0], round(monthly_numerator[i][1]/monthly_denominator[i][1],2)))
+                self.monthly_averages.append((monthly_numerator[i][0], round(monthly_numerator[i][1] /
+                                                                             monthly_denominator[i][1], 2)))
             i += 1
-
 
     def six_best_months(self):
         """
@@ -103,16 +106,27 @@ class StockMiner():
     def read_stock_data(self, file_name):
         """
         Read JSON from file.
-        :param file_name: JSON file
-        :return:
+        :param file_name: JSON file.
+        :return: Readable JSON file.
         """
         with open(file_name) as file_handle:
             file_contents = file_handle.read()
         return json.loads(file_contents)
 
 
-# standard definition function
+"""
+BONUS: Compare Two Stocks
+Given two stocks identify which of the two has the highest standard deviation of monthly averages.
+Your function should return appropriate errors or messages, if it cannot provide a reasonable assessment.
+"""
+
+
 def std(stock):
+        """
+        Standard deviation function
+        :param stock: Name of stock
+        :return: The standard deviation of the stock
+        """
         i = 0
         stock_ave = 0
         stock_dev = 0
@@ -126,6 +140,14 @@ def std(stock):
 
 
 def compare(stock1, stock1_file, stock2, stock2_file):
+        """
+        Function to compare two stocks
+        :param stock1: Name of one stock
+        :param stock1_file: File of one stock
+        :param stock2: Name of the second stock
+        :param stock2_file: File of second stock
+        :return: The stock that has the highest standard deviation of monthly averages
+        """
         stock1_list = StockMiner(stock1, stock1_file)
         stock2_list = StockMiner(stock2, stock2_file)
         if std(stock1_list.monthly_averages) > std(stock2_list.monthly_averages):
