@@ -21,17 +21,23 @@ __status__ = "Prototype"
 from mining import *
 
 
-# GOOG test
 def test_goog():
+    """
+    GOOG tests
+    :return:
+    """
     google = StockMiner("GOOG", "data/GOOG.json")
     assert google.six_best_months() == [('2007/12', 693.76), ('2007/11', 676.55), ('2007/10', 637.38),
                                         ('2008/01', 599.42), ('2008/05', 576.29), ('2008/06', 555.34)]
-    assert google.six_worst_months() == [('2004/08', 104.66),('2004/09', 116.38), ('2004/10', 164.52),
+    assert google.six_worst_months() == [('2004/08', 104.66), ('2004/09', 116.38), ('2004/10', 164.52),
                                          ('2004/11', 177.09), ('2004/12', 181.01), ('2005/03', 181.18)]
 
-# TSE-SO test
 
 def test_tse_so():
+    """
+    TSE-SO tests
+    :return:
+    """
     tseso = StockMiner("TSE-SO", "data/TSE-SO.json")
     assert tseso.six_best_months() == [('2007/12', 20.98), ('2007/11', 20.89), ('2013/05', 19.96), ('2013/06', 19.94),
                                        ('2013/04', 19.65), ('2007/10', 19.11)]
@@ -39,7 +45,10 @@ def test_tse_so():
                                         ('2009/04', 2.75), ('2009/01', 3.14)]
 
 
-# Bonus: Compare Two Stocks test
 def test_com():
+    """
+    BONUS: Compare Two Stocks tests
+    :return:
+    """
     assert compare("GOOG", "data/GOOG.json", "TSE-SO", "data/TSE-SO.json") == ["GOOG"]
     assert compare("GOOG", "data/GOOG.json", "GOOG", "data/GOOG.json") == ["Same"]
