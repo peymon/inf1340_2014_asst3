@@ -13,7 +13,7 @@ Objectives: perform data mining on the prices of stock data,
 __author__ = 'Peymon & Haoran & Olena'
 __email__ = "OlePeyHao@olepeyhao.com"
 
-__copyright__ = "Peymon & Haoran & Olena"
+__copyright__ = "2014 Peymon & Haoran & Olena"
 __license__ = "MIT License"
 
 __status__ = "Prototype"
