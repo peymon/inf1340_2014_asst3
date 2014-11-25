@@ -125,9 +125,9 @@ def std(stock):
 def compare(stock1, stock1_file, stock2, stock2_file):
         stock1_list = StockMiner(stock1, stock1_file)
         stock2_list = StockMiner(stock2, stock2_file)
-        if std(stock1_list.monthly_averages) < std(stock2_list.monthly_averages):
+        if std(stock1_list.monthly_averages) > std(stock2_list.monthly_averages):
             return [stock1]
-        elif std(stock1_list.monthly_averages) > std(stock2_list.monthly_averages):
+        elif std(stock1_list.monthly_averages) < std(stock2_list.monthly_averages):
             return [stock2]
         else:
             return ["Same"]
