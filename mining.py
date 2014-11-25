@@ -23,7 +23,10 @@ import json
 import datetime
 import itertools
 import math
-
+import numpy
+from numpy import *
+import matplotlib
+import matplotlib.pyplot as plt
 
 class StockMiner():
     """
@@ -131,3 +134,15 @@ def compare(stock1, stock1_file, stock2, stock2_file):
             return [stock2]
         else:
             return ["Same"]
+
+
+
+x_series = [0,1,2,3,4,5]
+y_series_lowest = [x**2 for x in x_series]
+y_series_ = [x**3 for x in x_series]
+
+#plot the two lines
+plt.plot(x_series, y_series_1)
+plt.plot(x_series, y_series_2)
+
+plt.savefig("example.png")
