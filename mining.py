@@ -167,3 +167,4 @@ y_series_2 = [x**3 for x in x_series]
 plt.plot(x_series, y_series_1)
 plt.plot(x_series, y_series_2)
 
+plt.savefig("example2.png")
