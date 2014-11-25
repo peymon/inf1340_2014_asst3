@@ -54,7 +54,7 @@ class StockMiner():
                 y_m_format = datetime.datetime.strptime(item["Date"], "%Y-%m-%d").strftime("%Y/%m")
                 item["Date"] = y_m_format
             else:
-                raise ValueError ("Invalid value")
+                raise ValueError("Invalid value")
 
     # average of stocks function
     def get_averages(self):
@@ -74,12 +74,12 @@ class StockMiner():
         for key, value in itertools.groupby(self.stock_data, lambda item: item["Date"]):
             denominator = sum([int(item["Volume"]) for item in value])
             monthly_denominator.append((key, denominator))
-        i=0
+        i = 0
         while i < len(monthly_numerator):
             if monthly_numerator[i][0] == monthly_denominator[i][0]:
-                self.monthly_averages.append((monthly_numerator[i][0], round(monthly_numerator[i][1]/monthly_denominator[i][1],2)))
+                self.monthly_averages.append((monthly_numerator[i][0], round(monthly_numerator[i][1] /
+                                                                             monthly_denominator[i][1], 2)))
             i += 1
-
 
     def six_best_months(self):
         """
