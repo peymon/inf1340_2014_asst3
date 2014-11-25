@@ -24,9 +24,6 @@ import datetime
 import itertools
 import math
 
-#stock_data = []
-#monthly_averages = []
-
 
 class StockMiner():
     """
@@ -59,9 +56,17 @@ class StockMiner():
             else:
                 raise ValueError ("Invalid value")
 
+    # average of stocks function
     def get_averages(self):
         monthly_numerator = []
         monthly_denominator = []
+        """
+            Calculation of monthly average prices of a stock.
+            average price = (V1 * C1 + V2 * C2)/(V1 + C2), where V is volume price and C is close price.
+
+            Create a tuple with two items: the average for that month and the date (only the month and year).
+            Append the tuple for each month to a list.
+         """
         for key, value in itertools.groupby(self.stock_data, lambda item: item["Date"]):
             numerator = sum([int(item["Volume"])*float(item["Close"]) for item in value])
             monthly_numerator.append((key, numerator))
@@ -75,13 +80,6 @@ class StockMiner():
                 self.monthly_averages.append((monthly_numerator[i][0], round(monthly_numerator[i][1]/monthly_denominator[i][1],2)))
             i += 1
 
-            """
-            Calculation of monthly average prices of a stock.
-            average price = (V1 * C1 + V2 * C2)/(V1 + C2), where V is volume price and C is close price.
-
-            Create a tuple with two items: the average for that month and the date (only the month and year).
-            Append the tuple for each month to a list.
-            """
 
     def six_best_months(self):
         """
@@ -90,7 +88,6 @@ class StockMiner():
         """
         six_best = sorted(self.monthly_averages, key=lambda averages: averages[1], reverse=True)[:6]
         return six_best
-        # return [('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0)]
 
     def six_worst_months(self):
         """
@@ -99,7 +96,6 @@ class StockMiner():
         """
         six_worst = sorted(self.monthly_averages, key=lambda averages: averages[1])[:6]
         return six_worst
-        #return [('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0), ('', 0.0)]
 
     def read_stock_data(self, file_name):
         """
@@ -112,6 +108,7 @@ class StockMiner():
         return json.loads(file_contents)
 
 
+# standard definition function
 def std(stock):
         i = 0
         stock_ave = 0
