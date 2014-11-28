@@ -29,9 +29,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 class StockMiner():
-    """
-    Information about a stock.
-    """
 
     def __init__(self, stock_name, stock_file_name):
         """
@@ -158,13 +155,47 @@ def compare(stock1, stock1_file, stock2, stock2_file):
             return ["Same"]
 
 
+"""
+BONUS: Visualize
+Create a visualization of the average monthly stock prices over time.
+Indicate the six best months and six worst months.
+"""
 
-x_series = [0,1,2,3,4,5]
-y_series_1 = [x**2 for x in x_series]
-y_series_2 = [x**3 for x in x_series]
+"""
+stock_list = StockMiner(stock, stock_file)
+time = [stock_list.monthly_averages[i][0] for i in range(stock_list.span())]
+stock_price = [stock_list.monthly_averages[i][1] for i in range(stock_list.span())]
 
-#plot the two lines
-plt.plot(x_series, y_series_1)
-plt.plot(x_series, y_series_2)
+date = list()
+for i in range(len(time)):
+    YYYY, mm = time[i].split("/")
+    date.append(datetime.datetime(int(YYYY), int(mm)))
 
+time_np = np.array(date)
+stock_price_np = np.array(stock_price)
+
+best_stocks = sorted(range(len(stock_price)), key=lambda i: stock_price[i])[-6:]
+worst_stocks = sorted(range(len(stock_price)), key=lambda i: stock_price[i])[:6]
+
+six_best_time = time_np[best_stocks]
+six_best_price = stock_price_np[best_stocks]
+six_worst_time = time_np[worst_stocks]
+six_worst_price = stock_price_np[worst_stocks]
+
+#Plot the three lines
+plt.plot(time, stock_price)
+plt.plot(six_best_time, six_best_price, "g^")
+plt.plot(six_worst_time, six_worst_price, "rs")
+
+#Include labels
+plt.title("Bonus 2: Stock Price Over Time")
+plt.xlabel("Time")
+plt.ylabel("Stock Price")
 plt.savefig("example2.png")
+plt.show()
+"""
+
+"""
+BONUS: Graphical User Interface
+Create a graphical user interface for your program.
+"""
