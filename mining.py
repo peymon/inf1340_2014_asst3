@@ -23,7 +23,7 @@ import json
 import datetime
 import itertools
 import math
-import numpy
+import numpy as np
 from numpy import *
 import matplotlib
 import matplotlib.pyplot as plt
@@ -162,39 +162,42 @@ Create a visualization of the average monthly stock prices over time.
 Indicate the six best months and six worst months.
 """
 
-"""
-stock_list = StockMiner(stock, stock_file)
-time = [stock_list.monthly_averages[i][0] for i in range(stock_list.span())]
-stock_price = [stock_list.monthly_averages[i][1] for i in range(stock_list.span())]
+def visual(stock, stock_file):
+    stock_list = StockMiner(stock, stock_file)
+    time = []
+    stock = []
+    i = 0
+    while i < len(stock_list.monthly_averages):
+        time.append(stock_list.monthly_averages[i][0])
+        stock.append(stock_list.monthly_averages[i][1])
+        i+=1
 
-date = list()
-for i in range(len(time)):
-    YYYY, mm = time[i].split("/")
-    date.append(datetime.datetime(int(YYYY), int(mm)))
+    date = []
+    for i in range(len(time)):
+        YYYY, mm, dd = time[i].split("/") + ["1"]
+        date.append(datetime.datetime(int(YYYY), int(mm), int(dd)))
 
-time_np = np.array(date)
-stock_price_np = np.array(stock_price)
+    time_np = np.array(date)
+    stock_np = np.array(stock)
 
-best_stocks = sorted(range(len(stock_price)), key=lambda i: stock_price[i])[-6:]
-worst_stocks = sorted(range(len(stock_price)), key=lambda i: stock_price[i])[:6]
+    best_stocks = sorted(range(len(stock)), key=lambda i: stock[i])[-6:]
+    worst_stocks = sorted(range(len(stock)), key=lambda i: stock[i])[:6]
 
-six_best_time = time_np[best_stocks]
-six_best_price = stock_price_np[best_stocks]
-six_worst_time = time_np[worst_stocks]
-six_worst_price = stock_price_np[worst_stocks]
+    six_best_time = time_np[best_stocks]
+    six_best_stock = stock_np[best_stocks]
+    six_worst_time = time_np[worst_stocks]
+    six_worst_stock = stock_np[worst_stocks]
 
-#Plot the three lines
-plt.plot(time, stock_price)
-plt.plot(six_best_time, six_best_price, "g^")
-plt.plot(six_worst_time, six_worst_price, "rs")
+    #Plot the three lines
+    plt.plot(date, stock)
+    plt.plot(six_best_time, six_best_stock, "g^")
+    plt.plot(six_worst_time, six_worst_stock, "rs")
 
-#Include labels
-plt.title("Bonus 2: Stock Price Over Time")
-plt.xlabel("Time")
-plt.ylabel("Stock Price")
-plt.savefig("example2.png")
-plt.show()
-"""
+    #Include labels
+    plt.title("Bonus 2: Stock Price Over Time")
+    plt.xlabel("Time")
+    plt.ylabel("Stock Price")
+    plt.show()
 
 
 """
