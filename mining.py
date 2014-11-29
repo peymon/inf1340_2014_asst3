@@ -32,9 +32,9 @@ class StockMiner():
 
     def __init__(self, stock_name, stock_file_name):
         """
+        Initializing function
         :param stock_name: Name of stock
         :param stock_file_name: Name of stock file
-        :   return:
         """
         self.stock_name = stock_name
         self.monthly_averages = []
@@ -89,6 +89,8 @@ class StockMiner():
         Using monthly averages, report the six best months with the highest average stock price.
         :return: The best six months
         """
+        if len(self.monthly_averages) < 6:
+            raise ValueError ("Invalid value. Requires more months.")
         six_best = sorted(self.monthly_averages, key=lambda averages: averages[1], reverse=True)[:6]
         return six_best
 
@@ -97,17 +99,21 @@ class StockMiner():
         Using monthly averages, report the six worst months with the lowest average stock price.
         :return: The worst six months
         """
+        if len(self.monthly_averages) < 6:
+            raise ValueError ("Invalid value. Requires more months.")
         six_worst = sorted(self.monthly_averages, key=lambda averages: averages[1])[:6]
         return six_worst
 
     def read_stock_data(self, file_name):
         """
         Read JSON from file.
-        :param file_name: JSON file.
         :return: Readable JSON file.
         """
-        with open(file_name) as file_handle:
-            file_contents = file_handle.read()
+        try:
+            with open(file_name) as file_handle:
+                file_contents = file_handle.read()
+        except FileNotFoundError:
+            raise FileNotFoundError("File not found")
         return json.loads(file_contents)
 
 
@@ -121,7 +127,6 @@ Your function should return appropriate errors or messages, if it cannot provide
 def std(stock):
         """
         Standard deviation function
-        :param stock: Name of stock
         :return: The standard deviation of the stock
         """
         i = 0
@@ -139,10 +144,6 @@ def std(stock):
 def compare(stock1, stock1_file, stock2, stock2_file):
         """
         Function to compare two stocks
-        :param stock1: Name of one stock
-        :param stock1_file: File of one stock
-        :param stock2: Name of the second stock
-        :param stock2_file: File of second stock
         :return: The stock that has the highest standard deviation of monthly averages
         """
         stock1_list = StockMiner(stock1, stock1_file)
@@ -194,6 +195,7 @@ plt.ylabel("Stock Price")
 plt.savefig("example2.png")
 plt.show()
 """
+
 
 """
 BONUS: Graphical User Interface
