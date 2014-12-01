@@ -27,9 +27,10 @@ import numpy as np
 from numpy import *
 import matplotlib
 import matplotlib.pyplot as plt
+import tkinter
+
 
 class StockMiner():
-
     def __init__(self, stock_name, stock_file_name):
         """
         Initializing function
@@ -71,7 +72,7 @@ class StockMiner():
         monthly_numerator = []
         monthly_denominator = []
         for key, value in itertools.groupby(self.stock_data, lambda item: item["Date"]):
-            numerator = sum([int(item["Volume"])*float(item["Close"]) for item in value])
+            numerator = sum([int(item["Volume"]) * float(item["Close"]) for item in value])
             monthly_numerator.append((key, numerator))
 
         for key, value in itertools.groupby(self.stock_data, lambda item: item["Date"]):
@@ -90,7 +91,7 @@ class StockMiner():
         :return: The best six months
         """
         if len(self.monthly_averages) < 6:
-            raise ValueError ("Invalid value. Requires more months.")
+            raise ValueError("Invalid value. Requires more months.")
         six_best = sorted(self.monthly_averages, key=lambda averages: averages[1], reverse=True)[:6]
         return six_best
 
@@ -100,7 +101,7 @@ class StockMiner():
         :return: The worst six months
         """
         if len(self.monthly_averages) < 6:
-            raise ValueError ("Invalid value. Requires more months.")
+            raise ValueError("Invalid value. Requires more months.")
         six_worst = sorted(self.monthly_averages, key=lambda averages: averages[1])[:6]
         return six_worst
 
@@ -125,35 +126,35 @@ Your function should return appropriate errors or messages, if it cannot provide
 
 
 def std(stock):
-        """
-        Standard deviation function
-        :return: The standard deviation of the stock
-        """
-        i = 0
-        stock_ave = 0
-        stock_dev = 0
-        while i < len(stock):
-            stock_ave += stock[i][1]
-            i += 1
-        mean1 = stock_ave/len(stock)
-        for item in stock:
-            stock_dev += (item[1] - mean1)**2
-        return math.sqrt(stock_dev/len(stock))
+    """
+    Standard deviation function
+    :return: The standard deviation of the stock
+    """
+    i = 0
+    stock_ave = 0
+    stock_dev = 0
+    while i < len(stock):
+        stock_ave += stock[i][1]
+        i += 1
+    mean1 = stock_ave / len(stock)
+    for item in stock:
+        stock_dev += (item[1] - mean1) ** 2
+    return math.sqrt(stock_dev / len(stock))
 
 
 def compare(stock1, stock1_file, stock2, stock2_file):
-        """
-        Function to compare two stocks
-        :return: The stock that has the highest standard deviation of monthly averages
-        """
-        stock1_list = StockMiner(stock1, stock1_file)
-        stock2_list = StockMiner(stock2, stock2_file)
-        if std(stock1_list.monthly_averages) > std(stock2_list.monthly_averages):
-            return [stock1]
-        elif std(stock1_list.monthly_averages) < std(stock2_list.monthly_averages):
-            return [stock2]
-        else:
-            return ["Same"]
+    """
+    Function to compare two stocks
+    :return: The stock that has the highest standard deviation of monthly averages
+    """
+    stock1_list = StockMiner(stock1, stock1_file)
+    stock2_list = StockMiner(stock2, stock2_file)
+    if std(stock1_list.monthly_averages) > std(stock2_list.monthly_averages):
+        return [stock1]
+    elif std(stock1_list.monthly_averages) < std(stock2_list.monthly_averages):
+        return [stock2]
+    else:
+        return ["Same"]
 
 
 """
@@ -161,6 +162,7 @@ BONUS: Visualize
 Create a visualization of the average monthly stock prices over time.
 Indicate the six best months and six worst months.
 """
+
 
 def visual(stock, stock_file):
     stock_list = StockMiner(stock, stock_file)
@@ -170,7 +172,7 @@ def visual(stock, stock_file):
     while i < len(stock_list.monthly_averages):
         time.append(stock_list.monthly_averages[i][0])
         stock.append(stock_list.monthly_averages[i][1])
-        i+=1
+        i += 1
 
     date = []
     for i in range(len(time)):
@@ -188,12 +190,12 @@ def visual(stock, stock_file):
     six_worst_time = time_np[worst_stocks]
     six_worst_stock = stock_np[worst_stocks]
 
-    #Plot the three lines
+    # Plot the three lines
     plt.plot(date, stock)
     plt.plot(six_best_time, six_best_stock, "g^")
     plt.plot(six_worst_time, six_worst_stock, "rs")
 
-    #Include labels
+    # Include labels
     plt.title("Bonus 2: Stock Price Over Time")
     plt.xlabel("Time")
     plt.ylabel("Stock Price")
@@ -204,3 +206,96 @@ def visual(stock, stock_file):
 BONUS: Graphical User Interface
 Create a graphical user interface for your program.
 """
+# create a new window
+window = tkinter.Tk()
+# title the window
+window.title("Stocks")
+# resize the window
+window.geometry("830x600")
+#background colour
+window.configure(background="#FFFFFF")
+
+#functions
+def best_six_months_display():
+    text_box.delete(1.0, tkinter.END)
+    text_box.insert(tkinter.CURRENT, "This is the best six months of the 'GOOG' stock \n\n")
+    text_box.insert(tkinter.CURRENT, StockMiner("GOOG", "data/GOOG.json").six_best_months())
+    text_box.insert(tkinter.CURRENT, "\n\n")
+    text_box.insert(tkinter.CURRENT, "This is the best six months of the 'TSE-SO' stock \n\n")
+    text_box.insert(tkinter.CURRENT, StockMiner("TSE-SO", "data/TSE-SO.json").six_best_months())
+
+
+def worst_six_months_display():
+    text_box.delete(1.0, tkinter.END)
+    text_box.insert(tkinter.CURRENT, "This is the worst six months of the 'GOOG' stock \n\n")
+    text_box.insert(tkinter.CURRENT, StockMiner("GOOG", "data/GOOG.json").six_worst_months())
+    text_box.insert(tkinter.CURRENT, "\n\n")
+    text_box.insert(tkinter.CURRENT, "This is the worst six months of the 'TSE-SO' stock \n\n")
+    text_box.insert(tkinter.CURRENT, StockMiner("TSE-SO", "data/TSE-SO.json").six_worst_months())
+
+
+def compare_stocks():
+    text_box.delete(1.0, tkinter.END)
+    text_box.insert(tkinter.CURRENT, compare("GOOG", "data/GOOG.json", "TSE-SO", "data/TSE-SO.json"))
+    text_box.insert(tkinter.CURRENT,
+                    " stock has the highest standard deviation of monthly averages among the two given stock files.")
+
+
+def visualization_goog():
+    text_box.delete(1.0, tkinter.END)
+    text_box.insert(tkinter.CURRENT,
+                    "A window will now open to show the GOOG stock graph, indicating its best and worst 6 months. \
+                    \n \nOnce finished, close the window to return to this page.")
+    text_box.insert(tkinter.CURRENT, visual("GOOG", "data/GOOG.json"))
+
+
+def visualization_tse():
+    text_box.delete(1.0, tkinter.END)
+    text_box.insert(tkinter.CURRENT,
+                    "A window will now open to show the TSE-SO stock graph, indicating its best and worst 6 months. \
+                    \n \nOnce finished, close the window to return to this page.")
+    text_box.insert(tkinter.CURRENT, visual("TSE-SO", "data/TSE-SO.json"))
+
+
+def clear_text():
+    text_box.delete(1.0, tkinter.END)
+    text_box.insert(tkinter.CURRENT, "ALL CLEAR!")
+
+
+#create the following widget(s)
+
+#label
+lbl = tkinter.Label(window, text="Click on the respective button to get the results", fg="#000000")
+
+#text editor
+text_box = tkinter.Text(window, wrap=tkinter.WORD, state=tkinter.NORMAL, bg="#000000", fg="#ffffff")
+
+#buttons
+btn_best_six = tkinter.Button(window, text="Best Six Months", command=lambda: best_six_months_display())
+
+btn_worst_six = tkinter.Button(window, text="Worst Six Months",
+                               command=lambda: worst_six_months_display())
+
+btn_compare = tkinter.Button(window, text="Compare Two Stocks", command=lambda: compare_stocks())
+
+btn_visual_goog = tkinter.Button(window, text="Graph GOOG Stock", command=lambda: visualization_goog())
+
+btn_visual_tse = tkinter.Button(window, text="Graph TSE-SO Stock", command=lambda: visualization_tse())
+
+clear_btn = tkinter.Button(window, text="Clear Screen", command=lambda: clear_text())
+
+
+#add the widget(s) to window
+lbl.pack(side="top")
+text_box.pack(side="top")
+btn_best_six.pack(side="left")
+btn_worst_six.pack(side="left")
+btn_compare.pack(side="left")
+btn_visual_goog.pack(side="left")
+btn_visual_tse.pack(side="left")
+clear_btn.pack(side="left", expand="TRUE")
+
+
+#draw window and start the app
+window.mainloop()
+
