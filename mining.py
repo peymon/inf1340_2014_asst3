@@ -218,50 +218,57 @@ window.configure(background="#FFFFFF")
 
 #functions
 def best_six_months_display():
+    stock = tkinter.filedialog.askopenfile(mode='r', title="Please choose a stock",
+                                           filetypes=[("JSON Stock Data file", "*.json")])
+    stock_path = stock.name
+    stock_name = stock_path.split("/")[-1].split(".")[0]
     text_box.delete(1.0, tkinter.END)
-    text_box.insert(tkinter.CURRENT, "This is the best six months of the 'GOOG' stock \n\n")
-    text_box.insert(tkinter.CURRENT, StockMiner("GOOG", "data/GOOG.json").six_best_months())
-    text_box.insert(tkinter.CURRENT, "\n\n")
-    text_box.insert(tkinter.CURRENT, "This is the best six months of the 'TSE-SO' stock \n\n")
-    text_box.insert(tkinter.CURRENT, StockMiner("TSE-SO", "data/TSE-SO.json").six_best_months())
+    text_box.insert(tkinter.CURRENT, "This is the best six months of the " + stock_name + " stock \n\n")
+    text_box.insert(tkinter.CURRENT, StockMiner(stock_name, stock_path).six_best_months())
 
 
 def worst_six_months_display():
+    stock = tkinter.filedialog.askopenfile(mode='r', title="Please choose a stock",
+                                           filetypes=[("JSON Stock Data file", "*.json")])
+    stock_path = stock.name
+    stock_name = stock_path.split("/")[-1].split(".")[0]
     text_box.delete(1.0, tkinter.END)
-    text_box.insert(tkinter.CURRENT, "This is the worst six months of the 'GOOG' stock \n\n")
-    text_box.insert(tkinter.CURRENT, StockMiner("GOOG", "data/GOOG.json").six_worst_months())
-    text_box.insert(tkinter.CURRENT, "\n\n")
-    text_box.insert(tkinter.CURRENT, "This is the worst six months of the 'TSE-SO' stock \n\n")
-    text_box.insert(tkinter.CURRENT, StockMiner("TSE-SO", "data/TSE-SO.json").six_worst_months())
+    text_box.insert(tkinter.CURRENT, "This is the worst six months of the " + stock_name + " stock \n\n")
+    text_box.insert(tkinter.CURRENT, StockMiner(stock_name, stock_path).six_worst_months())
 
 
 def compare_stocks():
+    stock1 = tkinter.filedialog.askopenfile(mode='r', title="Please choose a stock",
+                                           filetypes=[("JSON Stock Data file", "*.json")])
+    stock1_path = stock1.name
+    stock1_name = stock1_path.split("/")[-1].split(".")[0]
+
+    stock2 = tkinter.filedialog.askopenfile(mode='r', title="Please choose a stock to compare",
+                                           filetypes=[("JSON Stock Data file", "*.json")])
+    stock2_path = stock2.name
+    stock2_name = stock2_path.split("/")[-1].split(".")[0]
     text_box.delete(1.0, tkinter.END)
-    text_box.insert(tkinter.CURRENT, compare("GOOG", "data/GOOG.json", "TSE-SO", "data/TSE-SO.json"))
+    text_box.insert(tkinter.CURRENT, compare(stock1_name, stock1_path, stock2_name, stock2_path))
     text_box.insert(tkinter.CURRENT,
                     " stock has the highest standard deviation of monthly averages among the two given stock files.")
 
 
-def visualization_goog():
+def visualization_stock():
+    stock = tkinter.filedialog.askopenfile(mode='r', title="Please choose a stock",
+                                           filetypes=[("JSON Stock Data file", "*.json")])
+    stock_path = stock.name
+    stock_name = stock_path.split("/")[-1].split(".")[0]
     text_box.delete(1.0, tkinter.END)
+    
     text_box.insert(tkinter.CURRENT,
-                    "A window will now open to show the GOOG stock graph, indicating its best and worst 6 months. \
+                    "A window will now open to show the " + stock_name + " stock graph, indicating its best and worst 6 months. \
                     \n \nOnce finished, close the window to return to this page.")
-    text_box.insert(tkinter.CURRENT, visual("GOOG", "data/GOOG.json"))
-
-
-def visualization_tse():
-    text_box.delete(1.0, tkinter.END)
-    text_box.insert(tkinter.CURRENT,
-                    "A window will now open to show the TSE-SO stock graph, indicating its best and worst 6 months. \
-                    \n \nOnce finished, close the window to return to this page.")
-    text_box.insert(tkinter.CURRENT, visual("TSE-SO", "data/TSE-SO.json"))
+    text_box.insert(tkinter.CURRENT, visual(stock_name, stock_path))
 
 
 def clear_text():
     text_box.delete(1.0, tkinter.END)
     text_box.insert(tkinter.CURRENT, "ALL CLEAR!")
-
 
 #create the following widget(s)
 
@@ -279,9 +286,7 @@ btn_worst_six = tkinter.Button(window, text="Worst Six Months",
 
 btn_compare = tkinter.Button(window, text="Compare Two Stocks", command=lambda: compare_stocks())
 
-btn_visual_goog = tkinter.Button(window, text="Graph GOOG Stock", command=lambda: visualization_goog())
-
-btn_visual_tse = tkinter.Button(window, text="Graph TSE-SO Stock", command=lambda: visualization_tse())
+btn_visual_stock = tkinter.Button(window, text="Graph of Stock", command=lambda: visualization_stock())
 
 clear_btn = tkinter.Button(window, text="Clear Screen", command=lambda: clear_text())
 
@@ -292,8 +297,7 @@ text_box.pack(side="top")
 btn_best_six.pack(side="left")
 btn_worst_six.pack(side="left")
 btn_compare.pack(side="left")
-btn_visual_goog.pack(side="left")
-btn_visual_tse.pack(side="left")
+btn_visual_stock.pack(side="left")
 clear_btn.pack(side="left", expand="TRUE")
 
 
