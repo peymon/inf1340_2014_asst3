@@ -165,6 +165,7 @@ Indicate the six best months and six worst months.
 
 
 def visual(stock, stock_file):
+
     stock_list = StockMiner(stock, stock_file)
     time = []
     stock = []

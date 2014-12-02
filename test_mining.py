@@ -59,10 +59,23 @@ def test_tse_so():
     with pytest.raises(FileNotFoundError):
         tseso.read_stock_data("")
 
-def test_no_date():
-    no_date_list = StockMiner("NoDate", "data/NoDate.json")
+
+def test_invalid_value():
+    """
+    1. Test when there is date is missing. Raise ValueError
+    2. Test when there is date is wrong format. Raise ValueError
+    3. Test when there are less than six stocks in file. Raise ValueError
+    """
     with pytest.raises(ValueError):
-        no_date_list.change_date()
+        no_date = StockMiner("NoDate", "data/NoDate.json")
+
+    with pytest.raises(ValueError):
+        wrong_date = StockMiner("WrongDate", "data/WrongDate.json")
+
+    less_than_six = StockMiner("LessThanSix", "data/LessThanSix.json")
+    with pytest.raises(ValueError):
+        less_than_six.six_best_months()
+
 
 def test_com():
     """
