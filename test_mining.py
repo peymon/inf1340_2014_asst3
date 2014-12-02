@@ -67,12 +67,12 @@ def test_invalid_value():
     3. Test when there are less than six stocks in file. Raise ValueError
     """
     with pytest.raises(ValueError):
-        no_date = StockMiner("NoDate", "data/NoDate.json")
+        no_date = StockMiner("NoDate", "data/wrong_file/NoDate.json")
 
     with pytest.raises(ValueError):
-        wrong_date = StockMiner("WrongDate", "data/WrongDate.json")
+        wrong_date = StockMiner("WrongDate", "data/wrong_file/WrongDate.json")
 
-    less_than_six = StockMiner("LessThanSix", "data/LessThanSix.json")
+    less_than_six = StockMiner("LessThanSix", "data/wrong_file/LessThanSix.json")
     with pytest.raises(ValueError):
         less_than_six.six_best_months()
 
