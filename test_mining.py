@@ -58,6 +58,9 @@ def test_tse_so():
         tseso.change_date("1990-03-13")
     with pytest.raises(FileNotFoundError):
         tseso.read_stock_data("")
+    #with pytest.raises(TypeError):
+    #    tseso.change_date("0000-00-00")
+
 
 def test_com():
     """
